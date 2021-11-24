@@ -76,9 +76,6 @@ class TriggerAnalyzerRAWMiniAOD : public edm::one::EDAnalyzer<edm::one::SharedRe
       virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
       virtual void endJob() override;
   bool PassOfflineMuonSelection(const pat::Muon *mu, reco::Vertex::Point PV);
-  // bool PassOfflineElectronSelection(const pat::Electron * ele, reco::Vertex::Point PV);
-  // bool RecoHLTMatching(const edm::Event&,double recoeta, double recophi, std::string filtername, double dRmatching = 0.3);
-  // double VarStudied( const edm::Event& iEvent, double recoeta, double recophi,edm::EDGetTokenT<edm::AssociationMap<edm::OneToValue<std::vector<reco::RecoEcalCandidate>, float > > > varToken_,  edm::EDGetTokenT<trigger::TriggerFilterObjectWithRefs> candToken_,   bool  dividebyE, bool dividebyEt, double dRmatching =0.3);
 
       // ----------member data ---------------------------
 
@@ -98,28 +95,11 @@ class TriggerAnalyzerRAWMiniAOD : public edm::one::EDAnalyzer<edm::one::SharedRe
   edm::EDGetTokenT<std::vector<reco::GenJet> > genJet_token;
   edm::EDGetTokenT<std::vector<reco::GenParticle> > genPart_token;
 
-  // edm::EDGetTokenT<trigger::TriggerFilterObjectWithRefs> et_Filter_Token_;
-  // edm::EDGetTokenT<trigger::TriggerFilterObjectWithRefs> showershape_Filter_Token_;
-  // edm::EDGetTokenT<trigger::TriggerFilterObjectWithRefs> dphi_Filter_Token_;
-
-  // edm::EDGetTokenT<edm::AssociationMap<edm::OneToValue<std::vector<reco::RecoEcalCandidate>, float > > > showershape_Var_Token_;
-  // edm::EDGetTokenT<edm::AssociationMap<edm::OneToValue<std::vector<reco::RecoEcalCandidate>, float > > > hovere_Var_Token_;
-  // edm::EDGetTokenT<edm::AssociationMap<edm::OneToValue<std::vector<reco::RecoEcalCandidate>, float > > > trackiso_Var_Token_;
-
   edm::Service<TFileService> fs;
   
-  // TH1F* h_met;
-
-  // TH1F* h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num;
-  // TH1F* h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den;
-  // TH1F* h_met110_vs_met_num;
-  // TH1F* h_met110_vs_met_den;
-  // TH1F* h_met120_vs_met_num;
-  // TH1F* h_met120_vs_met_den;
-  // TH1F* h_met130_vs_met_num;
-  // TH1F* h_met130_vs_met_den;
-
   // histos
+  TH1F* h_counts;
+
   TH1F* h_HLT_PFMET120_PFMHT120_IDTight_vs_met_num;
   TH1F* h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_num;
   TH1F* h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num;
@@ -164,30 +144,7 @@ class TriggerAnalyzerRAWMiniAOD : public edm::one::EDAnalyzer<edm::one::SharedRe
   TH1F* h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_den;
   TH1F* h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_den;
 
-    
-  // TH1F* h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_den;
-  // TH1F* h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_num;
-  // TH1F* h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_numl1;
-  // TH1F* h_mu3pfjet200deepcsv1p59_vs_highestcsv_jetpt250_den;
-  // TH1F* h_mu3pfjet200deepcsv1p59_vs_highestcsv_jetpt250_num;
-  // TH1F* h_mu3pfjet200deepcsv1p59_vs_nbjetspt200_den;
-  // TH1F* h_mu3pfjet200deepcsv1p59_vs_nbjetspt200_num;
-  // TH1F* h_mu3pfjet200deepcsv1p59_vs_leadingmuonpt_den;
-  // TH1F* h_mu3pfjet200deepcsv1p59_vs_leadingmuonpt_num;
-  // TH1F* h_ele35wptight_lastfilter_den;
-  // TH1F* h_ele35wptight_lastfilter_num;
-  // TH1F* h_sietaieta_HLT;
-  // TH1F* h_hoe_HLT;
-  // TH1F* h_trackiso_HLT;
 };
-
-//
-// constants, enums and typedefs
-//
-
-//
-// static data member definitions
-//
 
 //
 // constructors and destructor
@@ -199,17 +156,7 @@ TriggerAnalyzerRAWMiniAOD::TriggerAnalyzerRAWMiniAOD(const edm::ParameterSet& iC
   trigobjectsRAWToken_=consumes<trigger::TriggerEvent>(edm::InputTag("hltTriggerSummaryAOD::HLT2"));  
 
   trgresultsORIGToken_= consumes<edm::TriggerResults>( edm::InputTag("TriggerResults::HLT") );
-  trgresultsHLT2Token_= consumes<edm::TriggerResults>( edm::InputTag("TriggerResults::HLT2") );
-
-
-  // showershape_Var_Token_  = consumes<edm::AssociationMap<edm::OneToValue<std::vector<reco::RecoEcalCandidate>, float > > > ( edm::InputTag("hltEgammaClusterShape","sigmaIEtaIEta5x5","HLT2") );
-  // hovere_Var_Token_  = consumes<edm::AssociationMap<edm::OneToValue<std::vector<reco::RecoEcalCandidate>, float > > > ( edm::InputTag("hltEgammaHoverE","","HLT2") );
-  // trackiso_Var_Token_  = consumes<edm::AssociationMap<edm::OneToValue<std::vector<reco::RecoEcalCandidate>, float > > > ( edm::InputTag("hltEgammaEleGsfTrackIso","","HLT2")  );
-
-  // et_Filter_Token_ = consumes<trigger::TriggerFilterObjectWithRefs> ( edm::InputTag("hltEG35L1SingleEGOrEtFilter","","HLT2") ) ;
-  // showershape_Filter_Token_ = consumes<trigger::TriggerFilterObjectWithRefs> ( edm::InputTag("hltEle35noerWPTightClusterShapeFilter","","HLT2") );
-  // dphi_Filter_Token_ = consumes<trigger::TriggerFilterObjectWithRefs> ( edm::InputTag("hltEle35noerWPTightGsfDphiFilter","","HLT2") );
-  
+  trgresultsHLT2Token_= consumes<edm::TriggerResults>( edm::InputTag("TriggerResults::HLT2") );  
 
   jet_token = consumes< std::vector<pat::Jet> >(edm::InputTag("slimmedJets") );
   muon_token = consumes<std::vector<pat::Muon> >(edm::InputTag("slimmedMuons") );
@@ -219,23 +166,13 @@ TriggerAnalyzerRAWMiniAOD::TriggerAnalyzerRAWMiniAOD(const edm::ParameterSet& iC
   genMET_token = consumes<std::vector<reco::GenMET> >(edm::InputTag("genMetTrue") );
   genJet_token = consumes<std::vector<reco::GenJet> >(edm::InputTag("ak4GenJetsNoNu") );
   genPart_token = consumes<std::vector<reco::GenParticle> >(edm::InputTag("genParticles") );
-  // genMET_token = consumes<std::vector<reco::GenMET> >(edm::InputTag("genMetTrue","","HLT") );
-
 
   //now do what ever initialization is needed
   usesResource("TFileService");
 
-  // h_met= fs->make<TH1F>("h_met","",50,0,500);
-  // h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num = fs->make<TH1F>("h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num","",40,0,120);
-  // h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den = fs->make<TH1F>("h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den","",40,0,120);
-  // h_met110_vs_met_num = fs->make<TH1F>("h_met110_vs_met_num","",50,0,200);
-  // h_met110_vs_met_den = fs->make<TH1F>("h_met110_vs_met_den","",50,0,200);
-  // h_met120_vs_met_num = fs->make<TH1F>("h_met120_vs_met_num","",50,0,200);
-  // h_met120_vs_met_den = fs->make<TH1F>("h_met120_vs_met_den","",50,0,200);
-  // h_met130_vs_met_num = fs->make<TH1F>("h_met130_vs_met_num","",50,0,200);
-  // h_met130_vs_met_den = fs->make<TH1F>("h_met130_vs_met_den","",50,0,200);
-
-
+  h_counts = fs->make<TH1F>("h_counts",1,0,1);
+  h_counts->SetCanExtend(TH1::kAllAxes);
+  
   h_HLT_PFMET120_PFMHT120_IDTight_vs_met_num                                  = fs->make<TH1F>("h_HLT_PFMET120_PFMHT120_IDTight_vs_met_num", "", 80, 0, 400);
   h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_num                                  = fs->make<TH1F>("h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_num", "", 80, 0, 400);
   h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num                               = fs->make<TH1F>("h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num", "", 80, 0, 400);
@@ -279,26 +216,6 @@ TriggerAnalyzerRAWMiniAOD::TriggerAnalyzerRAWMiniAOD(const edm::ParameterSet& iC
   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_den   = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_den", "", 120, 0, 600);
   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_den  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_den", "", 80, 0, 400);
   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_den  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_den", "", 80, 0, 400);
-
-
-
-
-  // h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_den= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_den","",50,0,500);
-  // h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_num= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_num","",50,0,500);
-  // h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_numl1= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_numl1","",50,0,500);
-  // h_mu3pfjet200deepcsv1p59_vs_highestcsv_jetpt250_den= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_highestcsv_jetpt250_den","",101,0,1.01);
-  // h_mu3pfjet200deepcsv1p59_vs_highestcsv_jetpt250_num= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_highestcsv_jetpt250_num","",101,0,1.01);
-  // h_mu3pfjet200deepcsv1p59_vs_nbjetspt200_den= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_nbjetspt200_den","",5,0,5);
-  // h_mu3pfjet200deepcsv1p59_vs_nbjetspt200_num= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_nbjetspt200_num","",5,0,5);
-  // h_mu3pfjet200deepcsv1p59_vs_leadingmuonpt_den= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_leadingmuonpt_den","",100,0,100);
-  // h_mu3pfjet200deepcsv1p59_vs_leadingmuonpt_num= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_leadingmuonpt_num","",100,0,100);
-  // h_ele35wptight_lastfilter_den= fs->make<TH1F>("h_ele35wptight_lastfilter_den","",20,0,100);
-  // h_ele35wptight_lastfilter_num= fs->make<TH1F>("h_ele35wptight_lastfilter_num","",20,0,100);
-
-  // h_sietaieta_HLT= fs->make<TH1F>("h_sietaieta_HLT","",100,0,0.05);
-  // h_hoe_HLT= fs->make<TH1F>("h_hoe_HLT","",100,0,0.2);
-  // h_trackiso_HLT= fs->make<TH1F>("h_trackiso_HLT","",100,0,0.5);
-
 
 }
 
@@ -389,111 +306,15 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
          // if(TrigPath.Index("HLT_Mu3_L1SingleJet180_v") >=0)passHLT_Mu3_L1SingleJet180=true;
          // if(TrigPath.Index("HLT_PFJet200DeepCSV_1p59_v") >=0)passHLT_PFJet200DeepCSV_1p59=true;
          //Notice the special syntax: since the path version can change during data taking one only looks for the string "HLT_IsoMu24_v"
+         if(TrigPath.Index("HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60") >=0) passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60 = true;
+         if(TrigPath.Index("HLT_DoubleMu3_DZ_PFMET50_PFMHT60") >=0)                              passHLT_DoubleMu3_DZ_PFMET50_PFMHT60 = true;
+         if(TrigPath.Index("HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight") >=0)            passHLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight = true;
+         if(TrigPath.Index("HLT_Mu15_IsoVVVL_PFHT400") >=0)                                      passHLT_Mu15_IsoVVVL_PFHT400 = true;
+         if(TrigPath.Index("HLT_PFHT800_PFMET75_PFMHT75") >=0)                                   passHLT_PFHT800_PFMET75_PFMHT75 = true;
        }
      }
    }
 
-   
-   // //Accessing the trigger objects in MINIAOD
-   // //This recipe works for MINIAOD only
-   // edm::Handle<pat::TriggerObjectStandAloneCollection> triggerObjects;
-   // iEvent.getByToken(trigobjectsMINIAODToken_, triggerObjects);
-
-   // const edm::TriggerNames &names = iEvent.triggerNames(*trigResults);
-   // for (pat::TriggerObjectStandAlone obj : *triggerObjects) {
-   //   obj.unpackFilterLabels(iEvent,*trigResults);
-   //   obj.unpackPathNames(names);
-   //   for (unsigned h = 0; h < obj.filterLabels().size(); ++h){
-   //     string myfillabl=obj.filterLabels()[h];
-   //     //cout << "Trigger object name, pt, eta, phi: "
-   //     //	    << myfillabl<<", " << obj.pt()<<", "<<obj.eta()<<", "<<obj.phi() << endl;
-   //   }
-   // }
-
-   // //Exercise 2: uncomment the lines above to print all the trigger objects and their corresponding pt, eta, phi. 
-   
-
-   // //Accessing the trigger objects in RAW/AOD
-   // //Printing here all trigger objects corresponding to the filter hltL3MuFiltered3
-   // edm::Handle<trigger::TriggerEvent> triggerObjectsSummary;
-   // iEvent.getByToken(trigobjectsRAWToken_ ,triggerObjectsSummary);
-   // trigger::TriggerObjectCollection selectedObjects;
-   // if (triggerObjectsSummary.isValid()) {
-   //   size_t filterIndex = (*triggerObjectsSummary).filterIndex( edm::InputTag("hltL3MuFiltered3","","HLT2") );
-   //   trigger::TriggerObjectCollection allTriggerObjects = triggerObjectsSummary->getObjects();
-   //   if (filterIndex < (*triggerObjectsSummary).sizeFilters()) { 
-   //     const trigger::Keys &keys = (*triggerObjectsSummary).filterKeys(filterIndex);
-   //     for (size_t j = 0; j < keys.size(); j++) {
-   //       //trigger::TriggerObject foundObject = (allTriggerObjects)[keys[j]];
-   //       //cout <<"object found, printing pt, eta, phi: " <<foundObject.pt()<<", "<<foundObject.eta()<<", "<< foundObject.phi() <<endl;
-   //     }
-   //   }
-   // }
-   
-   // //Exercise 3: uncomment the two lines above and modify the input tag to print all trigger objects corresponding to the last filter of the HLT_Mu3_PFJet200DeepCSV_1p59 path (btagged jet with pt>200 GeV)
-   // //Solution: replaced "hltL3MuFiltered3" by "hltBTagPF200CSVp080Single"
-   
-
-
-
-
-
-   // **************** Part 2. Accessing some offline information ************** 
-   
-   //What you really want to do is to assess the trigger performances on top of an offline selection. 
-    
-   
-   //Offline jets
-   //Find the highest pt b jet (medium WP i.e. csv>0.8484 for b tagging) in the event.
-   //Find the highest csv of a jet with pt>250 GeV in the event.
-   //Count the nb of bjets with pt>200 GeV in the event
-   // edm::Handle< std::vector<pat::Jet> > jets;
-   // iEvent.getByToken(jet_token,jets );
-
-   // double leadingbjetpt(-100), leadingbjeteta(-100),leadingbjetphi(-100); 
-   // double highestcsv_jetpt250 =-1;
-   // int nbjetspt200 = 0;
-   // for( std::vector<pat::Jet>::const_iterator jet = (*jets).begin(); jet != (*jets).end(); jet++ ) {
-   //   double ptjet = jet->pt();
-   //   double etajet = jet->eta();
-   //   double phijet = jet->phi();
-   //   double csvjet = jet->bDiscriminator("pfDeepCSVJetTags:probb")+ jet->bDiscriminator("pfDeepCSVJetTags:probbb");//cf https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation102X
-   //   //The next following lines just remove e/mu from (semi)leptonic ttbar. 
-   //   if( jet->muonEnergyFraction() >0.7)continue;
-   //   if( jet->electronEnergyFraction() >0.7)continue;
-     
-   //   if(abs( etajet)>2.4) continue; //Only consider jets in tracker acceptance since we want to do b tagging. 
-   //   if(csvjet>0.4184&& ptjet>leadingbjetpt) { leadingbjetpt = ptjet; leadingbjeteta =etajet; leadingbjetphi = phijet;} 
-   //   if(ptjet>250&& csvjet>highestcsv_jetpt250) { highestcsv_jetpt250 = csvjet;} 
-   //   if(csvjet>0.4184&& ptjet>200) { nbjetspt200++; } 
-   // }
-
-   
-   //Offline muons 
-   // edm::Handle< std::vector<pat::Muon> > muons;
-   // iEvent.getByToken(muon_token,muons );
-   // //We also need the vertices here
-   // edm::Handle<std::vector<Vertex> > theVertices;
-   // iEvent.getByToken(PV_token,theVertices) ;
-   // int nvertex = theVertices->size();
-   // Vertex::Point PV(0,0,0);
-   // if( nvertex) PV = theVertices->begin()->position();
-   // //Count the nb of offline muons with pt >3
-   // //Find the highest pt muon
-   // int nmuonspt3 =0; 
-   // double leadingmuonpt(-10),leadingmuoneta(-10),leadingmuonphi(-10);
-   // for( std::vector<pat::Muon>::const_iterator muon = (*muons).begin(); muon != (*muons).end(); muon++ ) {
-   //   if(!PassOfflineMuonSelection(&*muon,PV)) continue;
-   //   double ptmuon = muon->pt();
-   //   double etamuon = muon->eta();
-   //   double phimuon = muon->phi();
-   //   if(ptmuon>=3) nmuonspt3++;
-   //   if(ptmuon>leadingmuonpt){leadingmuonpt=ptmuon;leadingmuoneta=etamuon;leadingmuonphi=phimuon;}
-   // }
-
-   // //Offline MET
-   // edm::Handle< std::vector<pat::MET> > met;
-   //iEvent.getByToken(met_token,met );
 
    //
    // "Offline" (gen) quantities to plot the trigger performance versus
@@ -537,13 +358,13 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
 
    // used for vbf only
    float m;
-   for(int i=0; i<jets5p0.size(); i++){
-       for(int j=i+1; j<jets5p0.size(); j++){
+   for(unsigned int i=0; i<jets5p0.size(); i++){
+       for(unsigned int j=i+1; j<jets5p0.size(); j++){
            auto j1 = jets5p0[i];
            auto j2 = jets5p0[j];
            TLorentzVector v1, v2;
-           v1.SetPtEtaPhiM(j1->pt(), j1->eta(), j1->phi(), j1->m());
-           v2.SetPtEtaPhiM(j2->pt(), j2->eta(), j2->phi(), j2->m());
+           v1.SetPtEtaPhiM(j1->pt(), j1->eta(), j1->phi(), 0.);
+           v2.SetPtEtaPhiM(j2->pt(), j2->eta(), j2->phi(), 0.);
            m = (v1+v2).M();
            // prefer the largest mjj pair
            if (m > mjj){
@@ -593,22 +414,30 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
    if( muons1p4.size() ) mu1pt_1p4 = muons1p4.front()->pt();
    if( muons2p4.size() ) mu1pt_2p4 = muons2p4.front()->pt();
 
-   for(int i=0; i<muons2p4.size(); i++){
-       for(int j=i+1; j<muons2p4.size(); j++){
+   for(unsigned int i=0; i<muons2p4.size(); i++){
+       for(unsigned int j=i+1; j<muons2p4.size(); j++){
            if( deltaR(muons2p4[i]->eta(), muons2p4[i]->phi(), muons2p4[j]->eta(), muons2p4[j]->phi()) < 0.3 ) continue;
            if( muons2p4[j]->pt() > mu1pt_2p4) mu2pt_2p4 = muons2p4[j]->pt();
        }
    }
 
-   for(int i=0; i<muons1p4.size(); i++){
-       for(int j=i+1; j<muons1p4.size(); j++){
+   for(unsigned int i=0; i<muons1p4.size(); i++){
+       for(unsigned int j=i+1; j<muons1p4.size(); j++){
            if( deltaR(muons1p4[i]->eta(), muons1p4[i]->phi(), muons1p4[j]->eta(), muons1p4[j]->phi()) < 0.3 ) continue;
            if( muons1p4[j]->pt() > mu1pt_1p4) mu2pt_1p4 = muons1p4[j]->pt();
        }
    }
 
-
    // triggers for histograms
+   h_counts->Fill("HLT_IsoMu24",1);
+   h_counts->Fill("HLT_PFMET110_PFMHT110_IDTight",1);
+   h_counts->Fill("HLT_PFMET120_PFMHT120_IDTight",1);
+   h_counts->Fill("HLT_PFMET130_PFMHT130_IDTight",1);
+   h_counts->Fill("HLT_DoubleMu3_DZ_PFMET50_PFMHT60",1);
+   h_counts->Fill("HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60",1);
+   h_counts->Fill("HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight",1);
+   h_counts->Fill("HLT_Mu15_IsoVVVL_PFHT400",1);
+   h_counts->Fill("HLT_PFHT800_PFMET75_PFMHT75",1);
 
    // met
    h_HLT_PFMET120_PFMHT120_IDTight_vs_met_den->Fill(met) ;
@@ -617,53 +446,86 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
    if (passHLT_PFMET120_PFMHT120_IDTight) h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_num->Fill(mht2p5) ;
 
    // 2mu + MET
-   h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den->Fill(met) ;
-   if (passHLT_DoubleMu3_DZ_PFMET50_PFMHT60) h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num->Fill(met) ;
-   h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mht_den->Fill(mht2p5) ;
-   if (passHLT_DoubleMu3_DZ_PFMET50_PFMHT60) h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mht_num->Fill(mht2p5) ;
-   h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mu2_den->Fill(mu2pt_1p4) ;
-   if (passHLT_DoubleMu3_DZ_PFMET50_PFMHT60) h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mu2_num->Fill(mu2pt_1p4) ;
+   if(mu2pt_1p4 > 6){
+       h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den->Fill(met) ;
+       if (passHLT_DoubleMu3_DZ_PFMET50_PFMHT60) h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num->Fill(met) ;
+       h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mht_den->Fill(mht2p5) ;
+       if (passHLT_DoubleMu3_DZ_PFMET50_PFMHT60) h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mht_num->Fill(mht2p5) ;
+   }
+   if(met > 125){
+       h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mu2_den->Fill(mu2pt_1p4) ;
+       if (passHLT_DoubleMu3_DZ_PFMET50_PFMHT60) h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mu2_num->Fill(mu2pt_1p4) ;
+   }
 
    // mu + ISR + MET
-   h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mu_den->Fill(mu1pt_1p4) ;
-   if (passHLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight) h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mu_num->Fill(mu1pt_1p4) ;
-   h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_jet_den->Fill(j1pt_2p5) ;
-   if (passHLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight) h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_jet_num->Fill(j1pt_2p5) ;
-   h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_met_den->Fill(met) ;
-   if (passHLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight) h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_met_num->Fill(met) ;
-   h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mht_den->Fill(mht2p5) ;
-   if (passHLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight) h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mht_num->Fill(mht2p5) ;
+   if(j1pt_2p5 > 150 && met > 200 && mht2p5 > 200){
+       h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mu_den->Fill(mu1pt_1p4) ;
+       if (passHLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight) h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mu_num->Fill(mu1pt_1p4) ;
+   }
+   if(mu1pt_1p4 > 6 && met > 200 && mht2p5 > 200){
+       h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_jet_den->Fill(j1pt_2p5) ;
+       if (passHLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight) h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_jet_num->Fill(j1pt_2p5) ;
+   }
+   if(mu1pt_1p4 > 6 && j1pt_2p5 > 150){
+       h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_met_den->Fill(met) ;
+       if (passHLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight) h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_met_num->Fill(met) ;
+   }
+   if(mu1pt_1p4 > 6 && j1pt_2p5 > 150){
+       h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mht_den->Fill(mht2p5) ;
+       if (passHLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight) h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mht_num->Fill(mht2p5) ;
+   }
 
    // mu + HT
-   h_HLT_Mu15_IsoVVVL_PFHT400_vs_mu_den->Fill(mu1pt_1p4) ;
-   if (passHLT_Mu15_IsoVVVL_PFHT400) h_HLT_Mu15_IsoVVVL_PFHT400_vs_mu_num->Fill(mu1pt_1p4) ;
-   h_HLT_Mu15_IsoVVVL_PFHT400_vs_ht_den->Fill(ht2p5) ;
-   if (passHLT_Mu15_IsoVVVL_PFHT400) h_HLT_Mu15_IsoVVVL_PFHT400_vs_ht_num->Fill(ht2p5) ;
+   if(ht2p5>500){
+       h_HLT_Mu15_IsoVVVL_PFHT400_vs_mu_den->Fill(mu1pt_1p4) ;
+       if (passHLT_Mu15_IsoVVVL_PFHT400) h_HLT_Mu15_IsoVVVL_PFHT400_vs_mu_num->Fill(mu1pt_1p4) ;
+   }
+   if(mu1pt_1p4 > 17){
+       h_HLT_Mu15_IsoVVVL_PFHT400_vs_ht_den->Fill(ht2p5) ;
+       if (passHLT_Mu15_IsoVVVL_PFHT400) h_HLT_Mu15_IsoVVVL_PFHT400_vs_ht_num->Fill(ht2p5) ;
+   }
 
    // HT + MET
-   h_HLT_PFHT800_PFMET75_PFMHT75_vs_met_den->Fill(met) ;
-   if (passHLT_PFHT800_PFMET75_PFMHT75) h_HLT_PFHT800_PFMET75_PFMHT75_vs_met_num->Fill(met) ;
-   h_HLT_PFHT800_PFMET75_PFMHT75_vs_mht_den->Fill(mht2p5) ;
-   if (passHLT_PFHT800_PFMET75_PFMHT75) h_HLT_PFHT800_PFMET75_PFMHT75_vs_mht_num->Fill(mht2p5) ;
-   h_HLT_PFHT800_PFMET75_PFMHT75_vs_ht_den->Fill(ht2p5) ;
-   if (passHLT_PFHT800_PFMET75_PFMHT75) h_HLT_PFHT800_PFMET75_PFMHT75_vs_ht_num->Fill(ht2p5) ;
-   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mu_den->Fill(mu1pt_1p4) ;
+   if(ht2p5 > 1000){
+       h_HLT_PFHT800_PFMET75_PFMHT75_vs_met_den->Fill(met) ;
+       if (passHLT_PFHT800_PFMET75_PFMHT75) h_HLT_PFHT800_PFMET75_PFMHT75_vs_met_num->Fill(met) ;
+       h_HLT_PFHT800_PFMET75_PFMHT75_vs_mht_den->Fill(mht2p5) ;
+       if (passHLT_PFHT800_PFMET75_PFMHT75) h_HLT_PFHT800_PFMET75_PFMHT75_vs_mht_num->Fill(mht2p5) ;
+   }
+   if(met > 150){
+       h_HLT_PFHT800_PFMET75_PFMHT75_vs_ht_den->Fill(ht2p5) ;
+       if (passHLT_PFHT800_PFMET75_PFMHT75) h_HLT_PFHT800_PFMET75_PFMHT75_vs_ht_num->Fill(ht2p5) ;
+   }
 
    // mu + VBF + MET
-   if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mu_num->Fill(mu1pt_1p4) ;
-   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_jet_den->Fill(j2pt_5p0) ;
-   if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_jet_num->Fill(j2pt_5p0) ;
-   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_deta_den->Fill(deta) ;
-   if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_deta_num->Fill(deta) ;
-   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mjj_den->Fill(mjj) ;
-   if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mjj_num->Fill(mjj) ;
-   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_den->Fill(ht5p0) ;
-   if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_num->Fill(ht5p0) ;
-   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_den->Fill(met) ;
-   if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_num->Fill(met) ;
-   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_den->Fill(mht5p0) ;
-   if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_num->Fill(mht5p0) ;
-
+   if(j2pt_5p0 > 120 && deta > 3.6 && mjj > 1000 && ht5p0 > 400 && (met > 125 || mht5p0 > 125)){
+       h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mu_den->Fill(mu1pt_1p4) ;
+       if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mu_num->Fill(mu1pt_1p4) ;
+   }
+   if(mu1pt_1p4 > 6 && deta > 3.6 && mjj > 1000 && ht5p0 > 400 && (met > 125 || mht5p0 > 125)){
+       h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_jet_den->Fill(j2pt_5p0) ;
+       if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_jet_num->Fill(j2pt_5p0) ;
+   }
+   if(mu1pt_1p4 > 6 && j2pt_5p0 > 120 && mjj > 1000 && ht5p0 > 400 && (met > 125 || mht5p0 > 125)){
+       h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_deta_den->Fill(deta) ;
+       if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_deta_num->Fill(deta) ;
+   }
+   if(mu1pt_1p4 > 6 && j2pt_5p0 > 120 && deta > 3.6 && ht5p0 > 400 && (met > 125 || mht5p0 > 125)){
+       h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mjj_den->Fill(mjj) ;
+       if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mjj_num->Fill(mjj) ;
+   }
+   if(mu1pt_1p4 > 6 && j2pt_5p0 > 120 && deta > 3.6 && mjj > 1000 && (met > 125 || mht5p0 > 125)){
+       h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_den->Fill(ht5p0) ;
+       if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_num->Fill(ht5p0) ;
+   }
+   if(mu1pt_1p4 > 6 && j2pt_5p0 > 120 && deta > 3.6 && mjj > 1000 && ht5p0 > 400){
+       h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_den->Fill(met) ;
+       if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_num->Fill(met) ;
+   }
+   if(mu1pt_1p4 > 6 && j2pt_5p0 > 120 && deta > 3.6 && mjj > 1000 && ht5p0 > 400){
+       h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_den->Fill(mht5p0) ;
+       if (passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60) h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_num->Fill(mht5p0) ;
+   }
 
    
    // h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den->Fill( met );
@@ -675,153 +537,6 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
    // if(passHLT_PFMET120_PFMHT120_IDTight) h_met120_vs_met_num->Fill( met );
    // h_met130_vs_met_den->Fill( met );
    // if(passHLT_PFMET130_PFMHT130_IDTight) h_met130_vs_met_num->Fill( met );
-       
-       //Effcy vs pt of the leading b jet: 
-       // h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_den->Fill(leadingbjetpt);
-       // if(passHLT_Mu3_PFJet200DeepCSV_1p59) h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_num->Fill(leadingbjetpt);
-       // if(passHLT_Mu3_L1SingleJet180) h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_numl1->Fill(leadingbjetpt); //For L1 turn on only
-
-   // }
-   // //Effcy vs the highest csv of jet with pt>250:
-   // h_mu3pfjet200deepcsv1p59_vs_highestcsv_jetpt250_den->Fill(highestcsv_jetpt250);
-   // if(passHLT_Mu3_PFJet200DeepCSV_1p59) h_mu3pfjet200deepcsv1p59_vs_highestcsv_jetpt250_num->Fill(highestcsv_jetpt250);
-
-
-   // //Effcy vs nb of bjets with pt>200 
-   // h_mu3pfjet200deepcsv1p59_vs_nbjetspt200_den->Fill(nbjetspt200);
-   // if(passHLT_Mu3_PFJet200DeepCSV_1p59) h_mu3pfjet200deepcsv1p59_vs_nbjetspt200_num->Fill(nbjetspt200);
-   // }
-
-   // if(passHLT_PFJet200DeepCSV_1p59){
-   // //Effcy vs leading muon pt:
-   // h_mu3pfjet200deepcsv1p59_vs_leadingmuonpt_den->Fill(leadingmuonpt);
-   // if(passHLT_Mu3_PFJet200DeepCSV_1p59) h_mu3pfjet200deepcsv1p59_vs_leadingmuonpt_num->Fill(leadingmuonpt);
-   // }
-   // //Exercise 4: Define the denominator (offline selection) for the histograms filled above and look at the obtained efficiency plots. 
-   // //For this exercise, you need to run on at least 10k events in order to start to see the jet turn on. 
-   
-   // //Solution: Add the following conditions before filling the histos (both num and den):
-   // //For the jet related effcies: passHLT_IsoMu24 && leadingmuonpt>25 (to be on the plateau of the muon leg)
-   // //For the muon leg:  passHLT_PFJet200DeepCSV_1p59 (to be on the plateau of the jet leg)
-
-
-   
-   // //Exercise 5: Take a look at the histograms obtained in the following root file, with much higher stat: 
-   // ///afs/cern.ch/work/l/lathomas/public/HLTTutorial_27Oct2017/OutputFiles/out_singlemuon_highstat.root
-   // //Check the efficiency vs the leading jet pt. 
-
-   // //Questions: 
-   // //- Would you say that the plateau efficiency represents the probability for a b quark jet to fire the b tagging condition at HLT? 
-   // //Answer: the answer is likely NO !! Some fake jets (i.e. jets not coming from b quarks but mistagged as such by the offline algorithm) are probably populating the denominator. 
-   // //These have less chance to fire the trigger than real jets from b quarks. 
-   
-   // //- Do you understand why the efficiency increases with the n(bjets)? 
-   // //Answer: You require only one b jet at HLT, if you have several offline, you have more chances to pass your trigger ! 
-   
-   // //-Is the efficiency measured vs muon pt unbiased when running on a SingleMuon dataset?
-   // //Answer: NO ! All events in the muon dataset are required to fire a muon trigger, i.e. they do contain a HLT muon by definition !!
-   // //To properly measure the muon leg efficiency, you would need to work with the dataset in which HLT_PFJet200DeepCSV_1p59 was introduced (probably JetHT) 
-   // //Take a look at the following file to get an less biased measurement of the effcy vs muon pt: /afs/cern.ch/work/l/lathomas/public/HLTTutorial_27Oct2017/OutputFiles/out_jetht_highstat.root 
-   
-   // //This is a good example of a trigger where the efficiency can depend on your event content/kinematics and that should be manipulated with caution. 
-   // //Yet this example is quite realistic and could turn out to be quite useful. 
-   // //Without the b jet and the muon condition at HLT, a pure single jet trigger would require a threshold at 500 GeV for a similar rate !
-
-   
-   
-
-   // //Let's finally see a Tag and Probe example on Z(ee)
-   // //Offline electrons
-   // edm::Handle< std::vector<pat::Electron> > electrons;
-   // iEvent.getByToken(electron_token,electrons );
-   // //First loop to find a tag electron
-   // for( std::vector<pat::Electron>::const_iterator tagele = (*electrons).begin(); tagele != (*electrons).end(); tagele++ ) {
-   //   if(!PassOfflineElectronSelection(&*tagele,PV)) continue;
-   //   double pttagele = tagele->pt();
-   //   double etatagele = tagele->eta();
-   //   double phitagele = tagele->phi();
-   //   if(pttagele<35) continue; 
-   //   if(!RecoHLTMatching(iEvent,etatagele,phitagele,"hltEle35noerWPTightGsfTrackIsoFilter") ) continue;
-   //   //We want to match the tag to the last filter of the HLT_Ele35_WPTight_Gsf
-   //   //Take a look at  HLTrigger/Configuration/python/HLT_TutoEle35WPTight_cff.py to confirm that "hltEle35noerWPTightGsfTrackIsoFilter" is indeed the last filter of that path
-     
-   //   //Second loop on the probe
-   //   for( std::vector<pat::Electron>::const_iterator probeele = (*electrons).begin(); probeele != (*electrons).end(); probeele++ ) {
-   //     if(tagele==probeele)continue;//Tag and Probe should be different (obviously)
-   //     if(!PassOfflineElectronSelection(&*probeele,PV)) continue;
-   //     double ptprobeele = probeele->pt();
-   //     double etaprobeele = probeele->eta();
-   //     double phiprobeele = probeele->phi();
-
-   //     TLorentzVector p4tag, p4probe; 
-   //     p4tag.SetPtEtaPhiM(pttagele,etatagele,phitagele,0);
-   //     p4probe.SetPtEtaPhiM(ptprobeele,etaprobeele,phiprobeele,0);
-   //     double mass = (p4tag+p4probe).Mag();
-       
-   //     if(mass<60 ||mass>120) continue;
-   //     if(tagele->charge() * probeele->charge()>0)continue;
-   //     h_ele35wptight_lastfilter_den->Fill(ptprobeele);
-   //     if(RecoHLTMatching(iEvent,etaprobeele,phiprobeele,"hltEle35noerWPTightGsfTrackIsoFilter") ) h_ele35wptight_lastfilter_num->Fill(ptprobeele);
-
-       
-   //     //Note that everything above is done on miniAOD.
-   //     //If you want to do something similar for a new path, then you need to rerun HLT from RAW (obviously) and modify a bit the RecoHLTMatching function when you retrieve the trigger objects. 
-   //     //The previous examples should make it clear on how to do that. 
-
-     
-       
-   //     //Now, new (advanced) topic: access the HLT ID variables for an electron/photon.
-   //     //These are typically not stored, so you have to rerun HLT. 
-   //     //The various filters in the Single electron triggers are (in that order): Et cut, sigmaietaieta cut, H/E cut, ..., dphi cut, track iso cut
-   //     //We will take advantage that all these cuts are applied using the same EDFilter http://cmslxr.fnal.gov/source/HLTrigger/Egamma/src/HLTGeneric(QuadraticEta)Filter.cc 
-   //     //Here we will check the distribution of each variable just before the cut is applied. 
-   //     //For that we will need to specify the variable name and the previous filter name. All the work is done in this VarStudied function which essentially copies what is done in HLTGeneric(QuadraticEta)Filter
-       
-       
-   //     bool  dividebyE = false; bool dividebyEt = false; 
-       
-   //     //First sietaieta
-   //     double sietaieta_HLT = VarStudied(iEvent, etaprobeele,phiprobeele,showershape_Var_Token_,et_Filter_Token_ ,dividebyE, dividebyEt);
-   //     h_sietaieta_HLT->Fill(sietaieta_HLT);
-   //     //Next: H/E:
-   //     dividebyE = true; dividebyEt = false; //For H/E
-   //     double hoe_HLT  = VarStudied(iEvent, etaprobeele,phiprobeele,hovere_Var_Token_,showershape_Filter_Token_ ,dividebyE, dividebyEt);
-   //     h_hoe_HLT->Fill(hoe_HLT);
-   //     //Finally: trackiso 
-   //     dividebyE =false; dividebyEt = true; //For isolation 
-   //     double trackiso_HLT  = VarStudied(iEvent, etaprobeele,phiprobeele,trackiso_Var_Token_,dphi_Filter_Token_ ,dividebyE, dividebyEt);
-   //     h_trackiso_HLT->Fill(trackiso_HLT);
-
-   //   }
-   // }
-
-   // //Exercise 6.
-   // //Rerun the HLT_Ele35_WPTight_Gsf and to run on the SingleElectron dataset. 
-   // //In HLTrigger/Configuration/test do: 
-   // //cp HLT2_HLT.py HLT2_HLT_SingleEle.py
-   // //Open HLT2_HLT_SingleEle.py and make the following changes: 
-   // //The line:
-   // // process.load('HLTrigger.Configuration.HLT_TutoEffcySession_cff') 
-   // // should be replaced by: 
-   // // process.load('HLTrigger.Configuration.HLT_TutoEle35WPTight_cff')
-   // //The input files should be updated: 
-   // //fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/data/Run2018D/EGamma/MINIAOD/22Jan2019-v2/70001/D8790A22-9BE2-624F-A1CC-6A4A7CAC82D7.root')
-   // //secondaryFileNames = cms.untracked.vstring(
-   // //					      'root://cms-xrd-global.cern.ch//store/data/Run2018D/EGamma/RAW/v1/000/323/755/00000/F9080D12-2CDA-4F43-B7A9-C2F1D05E9C10.root',
-   // //					      'root://cms-xrd-global.cern.ch//store/data/Run2018D/EGamma/RAW/v1/000/323/755/00000/72D435E1-78D4-8047-92BD-3553117A5594.root',
-   // //                                         'root://cms-xrd-global.cern.ch//store/data/Run2018D/EGamma/RAW/v1/000/323/755/00000/266F4E2C-B30A-724E-9183-AD9368A10D51.root'
-   // //)
-
-
-   // //Make the above distributions (e.g. for sietaieta) only for probes passing the triggers and observe that the distributions are indeed truncated at the cut values reported in the HLT config file (HLTrigger/Configuration/python/HLT_TutoEle35WPTight_cff.py
-
-   // //Solution: 
-   // //just add the condition: 
-   // //if(RecoHLTMatching(iEvent,etaprobeele,phiprobeele,"hltEle35noerWPTightClusterShapeFilter") ) before h_sietaieta_HLT->Fill(sietaieta_HLT);
-   // //The cuts should be 0.011/0.0305 (barrel/endcaps).
-   // //N.B. Things are more subtle for H/E and TrackIso as the raw HLT variable is then corrected for PU. 
-   
-
 
 }
 
@@ -836,6 +551,8 @@ TriggerAnalyzerRAWMiniAOD::beginJob()
 void 
 TriggerAnalyzerRAWMiniAOD::endJob() 
 {
+  h_counts->LabelsDeflate("X");
+  h_counts->LabelsOption("v");
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
