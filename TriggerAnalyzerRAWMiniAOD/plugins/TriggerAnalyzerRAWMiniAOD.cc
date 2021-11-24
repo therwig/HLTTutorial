@@ -120,7 +120,6 @@ class TriggerAnalyzerRAWMiniAOD : public edm::one::EDAnalyzer<edm::one::SharedRe
   // TH1F* h_met130_vs_met_den;
 
   // histos
-  TH1F* h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_deta_num;
   TH1F* h_HLT_PFMET120_PFMHT120_IDTight_vs_met_num;
   TH1F* h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_num;
   TH1F* h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num;
@@ -143,7 +142,6 @@ class TriggerAnalyzerRAWMiniAOD : public edm::one::EDAnalyzer<edm::one::SharedRe
   TH1F* h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_num;
   TH1F* h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_num;
 
-  TH1F* h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_deta_den;
   TH1F* h_HLT_PFMET120_PFMHT120_IDTight_vs_met_den;
   TH1F* h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_den;
   TH1F* h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den;
@@ -228,14 +226,62 @@ TriggerAnalyzerRAWMiniAOD::TriggerAnalyzerRAWMiniAOD(const edm::ParameterSet& iC
   usesResource("TFileService");
 
   // h_met= fs->make<TH1F>("h_met","",50,0,500);
-  h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num = fs->make<TH1F>("h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num","",40,0,120);
-  h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den = fs->make<TH1F>("h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den","",40,0,120);
-  h_met110_vs_met_num = fs->make<TH1F>("h_met110_vs_met_num","",50,0,200);
-  h_met110_vs_met_den = fs->make<TH1F>("h_met110_vs_met_den","",50,0,200);
-  h_met120_vs_met_num = fs->make<TH1F>("h_met120_vs_met_num","",50,0,200);
-  h_met120_vs_met_den = fs->make<TH1F>("h_met120_vs_met_den","",50,0,200);
-  h_met130_vs_met_num = fs->make<TH1F>("h_met130_vs_met_num","",50,0,200);
-  h_met130_vs_met_den = fs->make<TH1F>("h_met130_vs_met_den","",50,0,200);
+  // h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num = fs->make<TH1F>("h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num","",40,0,120);
+  // h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den = fs->make<TH1F>("h_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den","",40,0,120);
+  // h_met110_vs_met_num = fs->make<TH1F>("h_met110_vs_met_num","",50,0,200);
+  // h_met110_vs_met_den = fs->make<TH1F>("h_met110_vs_met_den","",50,0,200);
+  // h_met120_vs_met_num = fs->make<TH1F>("h_met120_vs_met_num","",50,0,200);
+  // h_met120_vs_met_den = fs->make<TH1F>("h_met120_vs_met_den","",50,0,200);
+  // h_met130_vs_met_num = fs->make<TH1F>("h_met130_vs_met_num","",50,0,200);
+  // h_met130_vs_met_den = fs->make<TH1F>("h_met130_vs_met_den","",50,0,200);
+
+
+  h_HLT_PFMET120_PFMHT120_IDTight_vs_met_num                                  = fs->make<TH1F>("h_HLT_PFMET120_PFMHT120_IDTight_vs_met_num", "", 80, 0, 400);
+  h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_num                                  = fs->make<TH1F>("h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_num", "", 80, 0, 400);
+  h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num                               = fs->make<TH1F>("h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num", "", 80, 0, 400);
+  h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mht_num                               = fs->make<TH1F>("h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mht_num", "", 80, 0, 400);
+  h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mu2_num                               = fs->make<TH1F>("h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mu2_num", "", 80, 0, 8);
+  h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mu_num              = fs->make<TH1F>("h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mu_num", "", 80, 0, 8);
+  h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_jet_num             = fs->make<TH1F>("h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_jet_num", "", 80, 0, 400);
+  h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_met_num             = fs->make<TH1F>("h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_met_num", "", 80, 0, 400);
+  h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mht_num             = fs->make<TH1F>("h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mht_num", "", 80, 0, 400);
+  h_HLT_Mu15_IsoVVVL_PFHT400_vs_mu_num                                        = fs->make<TH1F>("h_HLT_Mu15_IsoVVVL_PFHT400_vs_mu_num", "", 120, 0, 30);
+  h_HLT_Mu15_IsoVVVL_PFHT400_vs_ht_num                                        = fs->make<TH1F>("h_HLT_Mu15_IsoVVVL_PFHT400_vs_ht_num", "", 80, 0, 800);
+  h_HLT_PFHT800_PFMET75_PFMHT75_vs_met_num                                    = fs->make<TH1F>("h_HLT_PFHT800_PFMET75_PFMHT75_vs_met_num", "", 80, 0, 400);
+  h_HLT_PFHT800_PFMET75_PFMHT75_vs_mht_num                                    = fs->make<TH1F>("h_HLT_PFHT800_PFMET75_PFMHT75_vs_mht_num", "", 80, 0, 400);
+  h_HLT_PFHT800_PFMET75_PFMHT75_vs_ht_num                                     = fs->make<TH1F>("h_HLT_PFHT800_PFMET75_PFMHT75_vs_ht_num", "", 120, 0, 1200);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mu_num   = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mu_num", "", 80, 0, 8);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_jet_num  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_jet_num", "", 80, 0, 400);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_deta_num = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_deta_num", "", 50, 0, 5);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mjj_num  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mjj_num", "", 120, 0, 1200);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_num   = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_num", "", 120, 0, 600);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_num  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_num", "", 80, 0, 400);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_num  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_num", "", 80, 0, 400);
+
+  h_HLT_PFMET120_PFMHT120_IDTight_vs_met_den                                  = fs->make<TH1F>("h_HLT_PFMET120_PFMHT120_IDTight_vs_met_den", "", 80, 0, 400);
+  h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_den                                  = fs->make<TH1F>("h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_den", "", 80, 0, 400);
+  h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den                               = fs->make<TH1F>("h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_den", "", 80, 0, 400);
+  h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mht_den                               = fs->make<TH1F>("h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mht_den", "", 80, 0, 400);
+  h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mu2_den                               = fs->make<TH1F>("h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_mu2_den", "", 80, 0, 8);
+  h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mu_den              = fs->make<TH1F>("h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mu_den", "", 80, 0, 8);
+  h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_jet_den             = fs->make<TH1F>("h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_jet_den", "", 80, 0, 400);
+  h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_met_den             = fs->make<TH1F>("h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_met_den", "", 80, 0, 400);
+  h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mht_den             = fs->make<TH1F>("h_HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight_vs_mht_den", "", 80, 0, 400);
+  h_HLT_Mu15_IsoVVVL_PFHT400_vs_mu_den                                        = fs->make<TH1F>("h_HLT_Mu15_IsoVVVL_PFHT400_vs_mu_den", "", 120, 0, 30);
+  h_HLT_Mu15_IsoVVVL_PFHT400_vs_ht_den                                        = fs->make<TH1F>("h_HLT_Mu15_IsoVVVL_PFHT400_vs_ht_den", "", 80, 0, 800);
+  h_HLT_PFHT800_PFMET75_PFMHT75_vs_met_den                                    = fs->make<TH1F>("h_HLT_PFHT800_PFMET75_PFMHT75_vs_met_den", "", 80, 0, 400);
+  h_HLT_PFHT800_PFMET75_PFMHT75_vs_mht_den                                    = fs->make<TH1F>("h_HLT_PFHT800_PFMET75_PFMHT75_vs_mht_den", "", 80, 0, 400);
+  h_HLT_PFHT800_PFMET75_PFMHT75_vs_ht_den                                     = fs->make<TH1F>("h_HLT_PFHT800_PFMET75_PFMHT75_vs_ht_den", "", 120, 0, 1200);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mu_den   = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mu_den", "", 80, 0, 8);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_jet_den  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_jet_den", "", 80, 0, 400);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_deta_den = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_deta_den", "", 50, 0, 5);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mjj_den  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mjj_den", "", 120, 0, 1200);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_den   = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_den", "", 120, 0, 600);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_den  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_den", "", 80, 0, 400);
+  h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_den  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_den", "", 80, 0, 400);
+
+
+
 
   // h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_den= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_den","",50,0,500);
   // h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_num= fs->make<TH1F>("h_mu3pfjet200deepcsv1p59_vs_leadbjetpt_num","",50,0,500);
