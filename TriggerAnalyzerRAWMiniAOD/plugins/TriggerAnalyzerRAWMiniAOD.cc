@@ -144,6 +144,25 @@ class TriggerAnalyzerRAWMiniAOD : public edm::one::EDAnalyzer<edm::one::SharedRe
   TH1F* h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_den;
   TH1F* h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_den;
 
+  // distributions of all quantities for triggers where effs are measured per-leg (no cuts)
+  TH1F* h_met;
+  TH1F* h_mht5p0;
+  TH1F* h_mht2p5;
+  TH1F* h_mu1pt_2p4_high;
+  TH1F* h_mu1pt_1p4;
+  TH1F* h_mu2pt_1p4;
+  TH1F* h_mu1pt_2p4;
+  TH1F* h_mu2pt_2p4;
+  TH1F* h_j1pt_2p5;
+  TH1F* h_j1pt_5p0;
+  TH1F* h_j2pt_5p0;
+  TH1F* h_ht5p0;
+  TH1F* h_ht2p5;
+  TH1F* h_ht5p0_high;
+  TH1F* h_ht2p5_high;
+  TH1F* h_mjj;
+  TH1F* h_deta;
+
 };
 
 //
@@ -170,9 +189,10 @@ TriggerAnalyzerRAWMiniAOD::TriggerAnalyzerRAWMiniAOD(const edm::ParameterSet& iC
   //now do what ever initialization is needed
   usesResource("TFileService");
 
-  h_counts = fs->make<TH1F>("h_counts",1,0,1);
+  h_counts = fs->make<TH1F>("h_counts","",20,0,20);
   h_counts->SetCanExtend(TH1::kAllAxes);
-  
+  h_counts->Fill("dummy", 1 );
+
   h_HLT_PFMET120_PFMHT120_IDTight_vs_met_num                                  = fs->make<TH1F>("h_HLT_PFMET120_PFMHT120_IDTight_vs_met_num", "", 80, 0, 400);
   h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_num                                  = fs->make<TH1F>("h_HLT_PFMET120_PFMHT120_IDTight_vs_mht_num", "", 80, 0, 400);
   h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num                               = fs->make<TH1F>("h_HLT_DoubleMu3_DZ_PFMET50_PFMHT60_vs_met_num", "", 80, 0, 400);
@@ -216,6 +236,24 @@ TriggerAnalyzerRAWMiniAOD::TriggerAnalyzerRAWMiniAOD(const edm::ParameterSet& iC
   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_den   = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_ht_den", "", 120, 0, 600);
   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_den  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_met_den", "", 80, 0, 400);
   h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_den  = fs->make<TH1F>("h_HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60_vs_mht_den", "", 80, 0, 400);
+
+  h_met            = fs->make<TH1F>("h_met" , "", 80, 0, 400);
+  h_mht5p0         = fs->make<TH1F>("h_mht5p0" , "", 80, 0, 400);
+  h_mht2p5         = fs->make<TH1F>("h_mht2p5" , "", 80, 0, 400);
+  h_mu1pt_2p4_high = fs->make<TH1F>("h_mu1pt_2p4_high" , "", 50, 0, 50);
+  h_mu1pt_1p4      = fs->make<TH1F>("h_mu1pt_1p4" , "", 40, 0, 10);
+  h_mu2pt_1p4      = fs->make<TH1F>("h_mu2pt_1p4" , "", 40, 0, 10);
+  h_mu1pt_2p4      = fs->make<TH1F>("h_mu1pt_2p4" , "", 40, 0, 10);
+  h_mu2pt_2p4      = fs->make<TH1F>("h_mu2pt_2p4" , "", 40, 0, 10);
+  h_j1pt_2p5       = fs->make<TH1F>("h_j1pt_2p5" , "", 80, 0, 400);
+  h_j1pt_5p0       = fs->make<TH1F>("h_j1pt_5p0" , "", 80, 0, 400);
+  h_j2pt_5p0       = fs->make<TH1F>("h_j2pt_5p0" , "", 80, 0, 400);
+  h_ht5p0          = fs->make<TH1F>("h_ht5p0" , "", 80, 0, 800);
+  h_ht2p5          = fs->make<TH1F>("h_ht2p5" , "", 80, 0, 800);
+  h_ht5p0_high     = fs->make<TH1F>("h_ht5p0_high" , "", 80, 0, 1200);
+  h_ht2p5_high     = fs->make<TH1F>("h_ht2p5_high" , "", 80, 0, 1200);
+  h_mjj            = fs->make<TH1F>("h_mjj" , "", 120, 0, 1200);
+  h_deta           = fs->make<TH1F>("h_deta", "", 50, 0, 5); 
 
 }
 
@@ -368,7 +406,7 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
            m = (v1+v2).M();
            // prefer the largest mjj pair
            if (m > mjj){
-               m = mjj;
+               mjj = m;
                deta = fabs(j1->eta()-j2->eta());
                j2pt_5p0 = j2->pt();
            }
@@ -417,27 +455,49 @@ TriggerAnalyzerRAWMiniAOD::analyze(const edm::Event& iEvent, const edm::EventSet
    for(unsigned int i=0; i<muons2p4.size(); i++){
        for(unsigned int j=i+1; j<muons2p4.size(); j++){
            if( deltaR(muons2p4[i]->eta(), muons2p4[i]->phi(), muons2p4[j]->eta(), muons2p4[j]->phi()) < 0.3 ) continue;
-           if( muons2p4[j]->pt() > mu1pt_2p4) mu2pt_2p4 = muons2p4[j]->pt();
+           if( muons2p4[j]->pt() > mu2pt_2p4) mu2pt_2p4 = muons2p4[j]->pt();
        }
    }
 
    for(unsigned int i=0; i<muons1p4.size(); i++){
        for(unsigned int j=i+1; j<muons1p4.size(); j++){
            if( deltaR(muons1p4[i]->eta(), muons1p4[i]->phi(), muons1p4[j]->eta(), muons1p4[j]->phi()) < 0.3 ) continue;
-           if( muons1p4[j]->pt() > mu1pt_1p4) mu2pt_1p4 = muons1p4[j]->pt();
+           if( muons1p4[j]->pt() > mu2pt_1p4) mu2pt_1p4 = muons1p4[j]->pt();
        }
    }
 
    // triggers for histograms
-   h_counts->Fill("HLT_IsoMu24",1);
-   h_counts->Fill("HLT_PFMET110_PFMHT110_IDTight",1);
-   h_counts->Fill("HLT_PFMET120_PFMHT120_IDTight",1);
-   h_counts->Fill("HLT_PFMET130_PFMHT130_IDTight",1);
-   h_counts->Fill("HLT_DoubleMu3_DZ_PFMET50_PFMHT60",1);
-   h_counts->Fill("HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60",1);
-   h_counts->Fill("HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight",1);
-   h_counts->Fill("HLT_Mu15_IsoVVVL_PFHT400",1);
-   h_counts->Fill("HLT_PFHT800_PFMET75_PFMHT75",1);
+   h_counts->Fill("all", 1 );
+   h_counts->Fill("HLT_IsoMu24",                                                  passHLT_IsoMu24                                                  );
+   h_counts->Fill("HLT_PFMET110_PFMHT110_IDTight",                                passHLT_PFMET110_PFMHT110_IDTight                                );
+   h_counts->Fill("HLT_PFMET120_PFMHT120_IDTight",                                passHLT_PFMET120_PFMHT120_IDTight                                );
+   h_counts->Fill("HLT_PFMET130_PFMHT130_IDTight",                                passHLT_PFMET130_PFMHT130_IDTight                                );
+   h_counts->Fill("HLT_DoubleMu3_DZ_PFMET50_PFMHT60",                             passHLT_DoubleMu3_DZ_PFMET50_PFMHT60                             );
+   h_counts->Fill("HLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight",           passHLT_Mu3er1p5_PFJet100er2p5_PFMET80_PFMHT80_IDTight           );
+   h_counts->Fill("HLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60",passHLT_Mu4_TrkIsoVVL_DiPFJet90_DEta3p5_Mjj750_HTT300_PFMETNoMu60);
+   h_counts->Fill("HLT_Mu15_IsoVVVL_PFHT400",                                     passHLT_Mu15_IsoVVVL_PFHT400                                     );
+   h_counts->Fill("HLT_PFHT800_PFMET75_PFMHT75",                                  passHLT_PFHT800_PFMET75_PFMHT75                                  );
+   
+
+   // event distributions
+   h_met->Fill(met);
+   h_mht5p0->Fill(mht5p0);
+   h_mht2p5->Fill(mht2p5);
+   h_mu1pt_2p4_high->Fill(mu1pt_2p4);
+   h_mu1pt_1p4->Fill(mu1pt_1p4);
+   h_mu2pt_1p4->Fill(mu2pt_1p4);
+   h_mu1pt_2p4->Fill(mu1pt_2p4);
+   h_mu2pt_2p4->Fill(mu2pt_2p4);
+   h_j1pt_2p5->Fill(j1pt_2p5);
+   h_j1pt_5p0->Fill(j1pt_5p0);
+   h_j2pt_5p0->Fill(j2pt_5p0);
+   h_ht5p0->Fill(ht5p0);
+   h_ht2p5->Fill(ht2p5);
+   h_ht5p0_high->Fill(ht5p0);
+   h_ht2p5_high->Fill(ht2p5);
+   h_mjj->Fill(mjj);
+   h_deta->Fill(deta);
+
 
    // met
    h_HLT_PFMET120_PFMHT120_IDTight_vs_met_den->Fill(met) ;
